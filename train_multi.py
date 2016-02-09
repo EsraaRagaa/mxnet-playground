@@ -1,5 +1,6 @@
 import mxnet as mx
 import voc_utils.voc_utils as voc
+import logging
 
 dataiter = mx.io.ImageRecordIter(
     path_imgrec='voc_train.rec',
@@ -34,6 +35,8 @@ top_pool = mx.symbol.Pooling(
 out = mx.symbol.SoftmaxOutput(
     data=top_pool, name='softmax', multi_output=True)
 net = mx.model.FeedForward(
-    symbol=out, num_epoch=1, learning_rate=0.01)
+    symbol=out, num_epoch=10, learning_rate=0.1, momentum=0.9)
+
+logging.basicConfig(level=logging.INFO)
 
 net.fit(X=dataiter, eval_data=datavaliter)
